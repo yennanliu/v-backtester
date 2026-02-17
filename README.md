@@ -2,7 +2,7 @@
 
 ## Setup
 
-step 1. enable claude code agent team setting
+-  step 1. enable claude code agent team setting
 - https://youtu.be/Jxp3ruMdKxY?si=ePIGzU1U23xeer3v&t=291
 - https://code.claude.com/docs/en/agent-teams#enable-agent-teams
 
@@ -33,9 +33,15 @@ step 1. enable claude code agent team setting
 }
 ```
 
+- step 2. run claude code
 
-step 2. run below prompt in project in claude CLI
-step 3. ask QA agent test, validte the project
+```bash
+claude --dangerously-skip-permissions
+```
+
+- step 2. run below prompt in project in claude CLI
+
+- step 3. ask QA agent test, validte the project
 
 ## Ref
 
