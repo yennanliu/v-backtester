@@ -1,0 +1,157 @@
+
+Prompt: 建立一個 Agent Team 來開發 MA 黃金交叉策略回測系統
+
+請建立一個 Agent Team，協作開發一套「MA 黃金交叉 / 死亡交叉 回測系統」。
+
+⸻
+
+🎯 專案目標
+
+開發一個完整的 MA（Moving Average）策略回測系統，包含：
+	•	MA 指標計算（短期 / 長期）
+	•	黃金交叉 / 死亡交叉偵測
+	•	回測引擎（模擬交易）
+	•	績效統計（報酬率、最大回撤等）
+	•	REST API
+	•	前端視覺化（K 線 + MA 線 + 交叉點標記）
+	•	單元測試
+
+⸻
+
+👥 建立 4 個 Agent Teammates
+
+⸻
+
+👨‍💻 成員 1：Backend Engineer（後端工程師）
+
+🎯 任務
+	1.	實作 MA 指標計算（SMA）
+	2.	實作黃金交叉 / 死亡交叉偵測
+	3.	建立回測引擎
+	4.	計算策略績效指標
+
+📁 檔案結構
+
+backend/
+ ├── indicators/
+ │    └── ma_indicator.py
+ ├── backtest/
+ │    └── ma_backtest.py
+
+🔧 技術要求
+	•	純 Python 實作
+	•	不可依賴 TA-Lib
+	•	使用 pandas / numpy 可接受
+	•	程式需模組化設計
+	•	回測需包含：
+	•	進場邏輯（黃金交叉）
+	•	出場邏輯（死亡交叉）
+	•	累積報酬計算
+	•	最大回撤計算
+
+⸻
+
+👨‍🔧 成員 2：API Engineer（API 工程師）
+
+🎯 任務
+	1.	建立 REST API 端點
+	2.	將後端回測模組包裝成 API
+
+📁 檔案
+
+backend/api/ma_routes.py
+
+🔧 技術要求
+	•	使用 FastAPI（優先）或 Flask
+	•	需 import Backend 模組
+	•	提供 API：
+
+1️⃣ 計算 MA
+
+POST /api/ma/calculate
+
+2️⃣ 執行回測
+
+POST /api/ma/backtest
+
+3️⃣ 取得策略績效
+
+GET /api/ma/performance
+
+📦 回傳格式
+
+JSON 格式，包含：
+	•	signals
+	•	trades
+	•	cumulative_return
+	•	max_drawdown
+
+⸻
+
+🎨 成員 3：Frontend Engineer（前端工程師）
+
+🎯 任務
+	1.	建立策略視覺化頁面
+	2.	顯示：
+	•	K 線圖
+	•	短期 MA
+	•	長期 MA
+	•	黃金交叉 / 死亡交叉標記
+
+📁 檔案
+
+frontend/ma-strategy.html
+
+🔧 技術要求
+	•	使用 Chart.js
+	•	使用原生 JS + CSS
+	•	呼叫後端 API
+	•	顯示：
+	•	MA 線
+	•	交叉點標記
+	•	回測績效摘要
+
+⸻
+
+🧪 成員 4：Test Engineer（測試工程師）
+
+🎯 任務
+	1.	撰寫單元測試
+	2.	測試：
+	•	MA 計算正確性
+	•	交叉判斷邏輯
+	•	回測結果正確性
+
+📁 檔案
+
+backend/tests/test_ma_strategy.py
+
+🔧 技術要求
+	•	使用 pytest
+	•	覆蓋率 ≥ 80%
+	•	測試：
+	•	邊界情況
+	•	單筆資料
+	•	空資料
+	•	極端行情
+
+⸻
+
+📌 協作規則
+	1.	Backend 先完成核心邏輯
+	2.	API Engineer 依賴 Backend
+	3.	Frontend 可並行開發 UI mock
+	4.	Test Engineer 依賴 Backend
+
+⸻
+
+🚀 最終輸出
+
+請產出：
+	•	完整專案目錄結構
+	•	每個檔案完整可執行程式碼
+	•	README.md
+	•	啟動方式說明
+	•	API 使用範例
+
+⸻
