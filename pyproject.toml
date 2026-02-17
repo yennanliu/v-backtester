@@ -4,4 +4,13 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "fastapi",
+    "numpy>=2.4.2",
+    "pandas>=3.0.0",
+    "pytest>=9.0.2",
+    "pytest-cov>=7.0.0",
+    "requests>=2.32.5",
+    "uvicorn",
+    "yfinance>=1.2.0",
+]

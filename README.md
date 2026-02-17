@@ -39,9 +39,15 @@
 claude --dangerously-skip-permissions
 ```
 
-### step 2. run below prompt in project in claude CLI
+### step 2. run below prompt in Claude code CLI
+
+- [prompt](https://github.com/yennanliu/v-backtester/blob/main/prompt/agent_team.txt)
+
+
 
 ### step 3. ask QA agent test, validte the project
+
+
 
 ## Ref
 
