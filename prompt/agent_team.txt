@@ -1,157 +1,53 @@
+## MA Golden Cross Backtesting System - Agent Team Prompt
 
-Prompt: 建立一個 Agent Team 來開發 MA 黃金交叉策略回測系統
+建立一個 **Agent Team** 來開發 **MA 黃金交叉策略回測系統**。
 
-請建立一個 Agent Team，協作開發一套「MA 黃金交叉 / 死亡交叉 回測系統」。
+生成 **4 個 teammate**：
 
-⸻
+### 【成員 1：後端工程師】Backend Engineer
 
-🎯 專案目標
+* **任務**：實作 MA 指標計算和回測引擎
+* **檔案**：
+* `backend/indicators/ma_indicator.py` (MA 計算、黃金/死亡交叉偵測)
+* `backend/backtest/ma_backtest.py` (回測引擎、績效計算)
 
-開發一個完整的 MA（Moving Average）策略回測系統，包含：
-	•	MA 指標計算（短期 / 長期）
-	•	黃金交叉 / 死亡交叉偵測
-	•	回測引擎（模擬交易）
-	•	績效統計（報酬率、最大回撤等）
-	•	REST API
-	•	前端視覺化（K 線 + MA 線 + 交叉點標記）
-	•	單元測試
 
-⸻
+* **技術要求**：純 Python 實作，不依賴 TA-Lib
 
-👥 建立 4 個 Agent Teammates
+### 【成員 2：API 工程師】API Engineer
 
-⸻
+* **任務**：實作 REST API 端點
+* **檔案**：`backend/api/ma_routes.py`
+* **依賴**：成員 1 完成後再開始 (需要 import 後端模組)
+* **技術要求**：使用 Flask 或 FastAPI
 
-👨‍💻 成員 1：Backend Engineer（後端工程師）
+### 【成員 3：前端工程師】Frontend Engineer
 
-🎯 任務
-	1.	實作 MA 指標計算（SMA）
-	2.	實作黃金交叉 / 死亡交叉偵測
-	3.	建立回測引擎
-	4.	計算策略績效指標
+* **任務**：實作前端視覺化介面
+* **檔案**：`frontend/ma-strategy.html` (含 JS 和 CSS)
+* **說明**：可與成員 1 並行工作
+* **技術要求**：使用 Chart.js 畫 K 線和 MA 線、標記交叉點
 
-📁 檔案結構
+### 【成員 4：測試工程師】Test Engineer
 
-backend/
- ├── indicators/
- │    └── ma_indicator.py
- ├── backtest/
- │    └── ma_backtest.py
+* **任務**：撰寫單元測試
+* **檔案**：`backend/tests/test_ma_strategy.py`
+* **依賴**：成員 1 完成後再開始
+* **測試重點**：
+1. MA 計算正確性 (用已知數據驗證)
+2. 黃金交叉/死亡交叉訊號產生正確
+3. 回測邏輯 (買入賣出時機、資金計算)
 
-🔧 技術要求
-	•	純 Python 實作
-	•	不可依賴 TA-Lib
-	•	使用 pandas / numpy 可接受
-	•	程式需模組化設計
-	•	回測需包含：
-	•	進場邏輯（黃金交叉）
-	•	出場邏輯（死亡交叉）
-	•	累積報酬計算
-	•	最大回撤計算
 
-⸻
 
-👨‍🔧 成員 2：API Engineer（API 工程師）
+---
 
-🎯 任務
-	1.	建立 REST API 端點
-	2.	將後端回測模組包裝成 API
+### 【任務依賴關係】
 
-📁 檔案
+* **成員 1** 最先開始，是核心。
+* **成員 2 和 4** 等成員 1 完成後再開始。
+* **成員 3** 可以跟成員 1 同時開始 (前端不依賴後端實作)。
+* **成員 2、3、4** 之間可並行。
 
-backend/api/ma_routes.py
-
-🔧 技術要求
-	•	使用 FastAPI（優先）或 Flask
-	•	需 import Backend 模組
-	•	提供 API：
-
-1️⃣ 計算 MA
-
-POST /api/ma/calculate
-
-2️⃣ 執行回測
-
-POST /api/ma/backtest
-
-3️⃣ 取得策略績效
-
-GET /api/ma/performance
-
-📦 回傳格式
-
-JSON 格式，包含：
-	•	signals
-	•	trades
-	•	cumulative_return
-	•	max_drawdown
-
-⸻
-
-🎨 成員 3：Frontend Engineer（前端工程師）
-
-🎯 任務
-	1.	建立策略視覺化頁面
-	2.	顯示：
-	•	K 線圖
-	•	短期 MA
-	•	長期 MA
-	•	黃金交叉 / 死亡交叉標記
-
-📁 檔案
-
-frontend/ma-strategy.html
-
-🔧 技術要求
-	•	使用 Chart.js
-	•	使用原生 JS + CSS
-	•	呼叫後端 API
-	•	顯示：
-	•	MA 線
-	•	交叉點標記
-	•	回測績效摘要
-
-⸻
-
-🧪 成員 4：Test Engineer（測試工程師）
-
-🎯 任務
-	1.	撰寫單元測試
-	2.	測試：
-	•	MA 計算正確性
-	•	交叉判斷邏輯
-	•	回測結果正確性
-
-📁 檔案
-
-backend/tests/test_ma_strategy.py
-
-🔧 技術要求
-	•	使用 pytest
-	•	覆蓋率 ≥ 80%
-	•	測試：
-	•	邊界情況
-	•	單筆資料
-	•	空資料
-	•	極端行情
-
-⸻
-
-📌 協作規則
-	1.	Backend 先完成核心邏輯
-	2.	API Engineer 依賴 Backend
-	3.	Frontend 可並行開發 UI mock
-	4.	Test Engineer 依賴 Backend
-
-⸻
-
-🚀 最終輸出
-
-請產出：
-	•	完整專案目錄結構
-	•	每個檔案完整可執行程式碼
-	•	README.md
-	•	啟動方式說明
-	•	API 使用範例
-
-⸻
+**請使用 delegate mode，lead 只負責協調，不要自己寫 code。**
+**每個 teammate 完成後要通知 lead。**
