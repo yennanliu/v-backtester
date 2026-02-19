@@ -416,7 +416,7 @@
     <script>
         // Global variables
         let chart = null;
-        const API_BASE_URL = 'http://localhost:5000';
+        const API_BASE_URL = 'http://localhost:8000';
 
         // Initialize date inputs with default values
         function initializeDates() {
@@ -474,7 +474,7 @@
         }
 
         // Create chart
-        function createChart(data) {
+        function createChart(data, requestParams) {
             const canvas = document.getElementById('priceChart');
             const ctx = canvas.getContext('2d');
 
@@ -482,6 +482,13 @@
             if (chart) {
                 chart.destroy();
             }
+
+            // Split unified signals array into buy/sell
+            const buySignals = (data.signals || []).filter(s => s.type === 'golden_cross');
+            const sellSignals = (data.signals || []).filter(s => s.type === 'death_cross');
+
+            const shortPeriod = requestParams.short_period;
+            const longPeriod = requestParams.long_period;
 
             // Prepare datasets
             const datasets = [
@@ -499,7 +506,7 @@
                     fill: true
                 },
                 {
-                    label: `Short MA (${data.short_period})`,
+                    label: `Short MA (${shortPeriod})`,
                     data: data.dates.map((date, i) => ({
                         x: date,
                         y: data.short_ma[i]
@@ -511,7 +518,7 @@
                     fill: false
                 },
                 {
-                    label: `Long MA (${data.long_period})`,
+                    label: `Long MA (${longPeriod})`,
                     data: data.dates.map((date, i) => ({
                         x: date,
                         y: data.long_ma[i]
@@ -525,10 +532,10 @@
             ];
 
             // Add buy signals (golden cross)
-            if (data.buy_signals && data.buy_signals.length > 0) {
+            if (buySignals.length > 0) {
                 datasets.push({
                     label: 'Golden Cross (Buy)',
-                    data: data.buy_signals.map(signal => ({
+                    data: buySignals.map(signal => ({
                         x: signal.date,
                         y: signal.price
                     })),
@@ -542,10 +549,10 @@
             }
 
             // Add sell signals (death cross)
-            if (data.sell_signals && data.sell_signals.length > 0) {
+            if (sellSignals.length > 0) {
                 datasets.push({
                     label: 'Death Cross (Sell)',
-                    data: data.sell_signals.map(signal => ({
+                    data: sellSignals.map(signal => ({
                         x: signal.date,
                         y: signal.price
                     })),
@@ -635,13 +642,13 @@
             const metrics = [
                 {
                     label: 'Total Return',
-                    value: formatPercentage(results.total_return),
-                    isPositive: results.total_return >= 0
+                    value: formatPercentage(results.total_return_pct),
+                    isPositive: results.total_return_pct >= 0
                 },
                 {
                     label: 'Final Portfolio Value',
-                    value: formatCurrency(results.final_value),
-                    isPositive: results.final_value >= results.initial_capital
+                    value: formatCurrency(results.final_portfolio_value),
+                    isPositive: results.final_portfolio_value >= results.initial_capital
                 },
                 {
                     label: 'Number of Trades',
@@ -650,13 +657,13 @@
                 },
                 {
                     label: 'Win Rate',
-                    value: formatPercentage(results.win_rate),
-                    isPositive: results.win_rate >= 50
+                    value: formatPercentage(results.win_rate_pct),
+                    isPositive: results.win_rate_pct >= 50
                 },
                 {
                     label: 'Max Drawdown',
-                    value: formatPercentage(results.max_drawdown),
-                    isPositive: results.max_drawdown >= -10
+                    value: formatPercentage(results.max_drawdown_pct),
+                    isPositive: results.max_drawdown_pct >= -10
                 },
                 {
                     label: 'Sharpe Ratio',
@@ -722,23 +729,14 @@
 
                 if (!response.ok) {
                     const error = await response.json();
-                    throw new Error(error.error || 'Failed to run backtest');
+                    throw new Error(error.detail || 'Failed to run backtest');
                 }
 
-                const data = await response.json();
+                const responseData = await response.json();
 
-                // Fetch results
-                const resultsResponse = await fetch(`${API_BASE_URL}/api/backtest/results`);
-
-                if (!resultsResponse.ok) {
-                    throw new Error('Failed to fetch results');
-                }
-
-                const resultsData = await resultsResponse.json();
-
-                // Display chart and results
-                createChart(resultsData.chart_data);
-                displayResults(resultsData.results);
+                // Display chart and results directly from POST response
+                createChart(responseData.data.chart_data, responseData.data.request_params);
+                displayResults(responseData.data.performance_metrics);
 
             } catch (error) {
                 console.error('Error:', error);
