@@ -1,0 +1,66 @@
+## MA Golden Cross Backtesting System - Dev + QA Agent Team Prompt
+
+建立一個 **Agent Team** 來開發並驗證 **MA 黃金交叉策略回測系統**。
+
+生成 **4 個 teammate**：
+
+---
+
+### 【成員 1：後端工程師】Backend Engineer
+
+* **任務**：Review 並維護 MA 指標計算和回測引擎
+* **檔案**：
+  * `backend/indicators/ma_indicator.py` (MA 計算、黃金/死亡交叉偵測)
+  * `backend/backtest/ma_backtest.py` (回測引擎、績效計算)
+* **技術要求**：純 Python 實作，不依賴 TA-Lib
+* **完成後通知 lead**
+
+---
+
+### 【成員 2：API 工程師】API Engineer
+
+* **任務**：Review 並驗證 REST API 端點是否正確
+* **檔案**：`backend/api/ma_routes.py`、`backend/app.py`
+* **依賴**：成員 1 完成後再開始
+* **技術要求**：FastAPI，API 跑在 port 8000
+* **注意**：前端 `ma-strategy.html` 目前硬寫 `localhost:5000`，需要修正成 `localhost:8000`
+* **完成後通知 lead**
+
+---
+
+### 【成員 3：前端工程師】Frontend Engineer
+
+* **任務**：Review 並修正前端視覺化介面
+* **檔案**：`frontend/ma-strategy.html`
+* **說明**：可與成員 1 並行工作
+* **已知 Bug**：`API_BASE_URL` 目前設定為 `http://localhost:5000`，需改成 `http://localhost:8000`
+* **技術要求**：使用 Chart.js，確認 API 回傳的資料欄位名稱與前端期望的一致
+* **完成後通知 lead**
+
+---
+
+### 【成員 4：QA 測試工程師】QA Engineer
+
+* **任務**：執行測試、驗證系統、回報問題
+* **檔案**：`backend/tests/test_ma_strategy.py`、`backend/tests/conftest.py`
+* **依賴**：成員 1 完成後再開始
+* **測試步驟**：
+  1. 執行 `uv run pytest backend/tests/test_ma_strategy.py -v --cov=backend` 確認所有測試通過
+  2. 啟動 API server：`uv run python backend/app.py`（背景執行）
+  3. 以 curl 或 requests 測試 `POST /api/backtest`（ticker: AAPL, 2023-01-01 ~ 2023-12-31, short=50, long=200）
+  4. 確認回傳結果包含 `performance_metrics`、`chart_data`、`trades`
+  5. 回報任何失敗或異常
+* **完成後通知 lead，並提供完整測試報告**
+
+---
+
+### 【任務依賴關係】
+
+* **成員 1** 最先開始，是核心。
+* **成員 2 和 4** 等成員 1 完成後再開始。
+* **成員 3** 可以跟成員 1 同時開始。
+* **成員 2、3、4** 之間可並行。
+
+**請使用 delegate mode，lead 只負責協調，不要自己寫 code。**
+**每個 teammate 完成後要通知 lead。**
+**所有 teammate 完成後，lead 提供整體摘要報告。**
