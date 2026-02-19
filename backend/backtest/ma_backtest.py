@@ -397,8 +397,8 @@ def run_ma_backtest(
     # Fetch data
     data = backtester.fetch_data(ticker, start_date, end_date)
 
-    # Run backtest
-    results = backtester.run_backtest(data['Close'])
+    # Run backtest (squeeze to Series in case yfinance returns a single-column DataFrame)
+    results = backtester.run_backtest(data['Close'].squeeze())
 
     # Print summary if verbose
     if verbose:
